@@ -1,0 +1,89 @@
+==============================================
+Instrukcja uruchamiania wtyczek w GLPi 
+==============================================
+
+Materia³y : 
+
+witryna z dokumentacj¹ GLPi:  https://glpi-project.org/pl/dokumentacja/
+manual dla GLPi Plugins: https://glpi-plugins.readthedocs.io/en/latest/
+
+
+++++++++++++++++++++++++++++++++++++++++++++++
+I Pusta wtyczka
+++++++++++++++++++++++++++++++++++++++++++++++
+
+https://glpi-plugins.readthedocs.io/en/latest/empty/index.html
+
+1 Deployment kodu na serwer aplikacyjny glpi-uwm-apache-01
+a) wariant 1: 
+- pobieramy zip z GitHub : https://github.com/pluginsGLPI/empty na maszynê z glpi-uwm-dc-01 (Windows)
+- wykonujemy deploy z u¿yciem Webmina : ->Tools->Upload and Download->Upload to Server
+- wskazujemy cel : File or Directory to upload to : /home/adminer/download
+- przeci¹gamy zbiory zip DragAndDrop
+b) wariant 2: 
+- logowanie na terminal do GLPI przez putty z maszyny glpi-uwm-dc-01 (Windows)
+- pobranie w trybie sudo binaria z GitHub 
+wget https://github.com/pluginsGLPI/empty/archive/refs/heads/main.zip
+
+2. rozpakowanie zbioru do katalogu docelowego
+	unzip /home/adminer/download/main.zip -d /var/www/html/glpi/plugin
+3. weryfikacja czy w katalogu jest rozpakowany zbiór empty-main
+	ll /var/www/html/glpi/plugin
+4. zmiana uprawnien i cz³onkostw
+	sudo chown -R www-data:www-data /var/www/html/glpi/plugin/empty-main
+	sudo chmod -R 775 /var/www/html/glpi/plugin/empty-main
+5. tworzenie plugin przy u¿yciu skryptu
+	./var/www/html/glpi/plugin/empty-main/plugin.sh emptyplg 0.0.1
+6. weryfikacja pojawienia siê pluginu w GLPi Wtyczki/Zainstalowane
+7. instalacja wtyczki
+8. aktywacja wtyczki
+
+++++++++++++++++++++++++++++++++++++++++++++++
+II Przyk³adowa wtyczka
+++++++++++++++++++++++++++++++++++++++++++++++
+
+https://github.com/pluginsGLPI/example
+
+1 Deployment kodu na serwer aplikacyjny glpi-uwm-apache-01
+a) wariant 1: 
+
+b) wariant 2: 
+wget https://github.com/pluginsGLPI/example/archive/refs/heads/main.zip
+
+2. rozpakowanie zbioru do katalogu docelowego
+	unzip /home/adminer/download/main.zip -d /var/www/html/glpi/plugin
+3. weryfikacja czy w katalogu jest rozpakowany zbiór empty-main
+	ll /var/www/html/glpi/plugin
+4. zmiana uprawnien i cz³onkostw
+	sudo chown -R www-data:www-data /var/www/html/glpi/plugin/example-main
+	sudo chmod -R 775 empty /var/www/html/glpi/plugin/example-main
+5. zmiana nazwy pluginu 
+	mv /var/www/html/glpi/plugin/example-main /var/www/html/glpi/plugin/example
+6. weryfikacja pojawienia siê pluginu w GLPi Wtyczki/Zainstalowane
+7. instalacja wtyczki
+8. aktywacja wtyczki
+
+++++++++++++++++++++++++++++++++++++++++++++++
+III U¿ytkowa wtyczka TreeView
+++++++++++++++++++++++++++++++++++++++++++++++
+
+https://github.com/pluginsGLPI/treeview
+
+1 Deployment kodu na serwer aplikacyjny glpi-uwm-apache-01
+a) wariant 1: 
+
+b) wariant 2: 
+wget https://github.com/pluginsGLPI/treeview/archive/refs/heads/main.zip
+
+2. rozpakowanie zbioru do katalogu docelowego
+	unzip /home/adminer/download/main.zip -d /var/www/html/glpi/plugin
+3. weryfikacja czy w katalogu jest rozpakowany zbiór treeview-main
+	ll /var/www/html/glpi/plugin
+4. zmiana uprawnien i cz³onkostw
+	sudo chown -R www-data:www-data /var/www/html/glpi/plugin/treeview-main
+	sudo chmod -R 775 empty /var/www/html/glpi/plugin/treeview-main
+5. zmiana nazwy pluginu 
+	mv /var/www/html/glpi/plugin/example-main /var/www/html/glpi/plugin/treeview
+6. weryfikacja pojawienia siê pluginu w GLPi Wtyczki/Zainstalowane
+7. instalacja wtyczki
+8. aktywacja wtyczki
