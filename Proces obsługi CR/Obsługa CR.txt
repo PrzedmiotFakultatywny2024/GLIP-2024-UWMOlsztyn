@@ -1,0 +1,76 @@
+Fazy w precesie obs³ugi CR
+
+1.Rejestracja wniosku zmiany
+Numer
+Tytu³ zmiany*	 
+Priorytet*	
+Data zg³oszenia*	
+Wnioskuj¹cy*
+Opis*
+	 
+2.Analiza*
+Realizowany przez	 
+Zakres
+
+Ryzyka
+- Opis
+- Obs³uga
+- Przydzia³
+
+Zadania
+- Etapy
+- zadania kluczowe (milestone)
+- zadania wspieraj¹ce
+- sekwencja zadañ (równoleg³e, sekwencyjne)
+- przypiasnie zadania
+- czas trwania zadania
+ 
+Harmonogram
+- ramy czasowe - sprinty (dayly, weekly)
+
+Integracje
+- Kierunek przep³ywu danych
+- Zakres integracji
+- Administrator
+- Akcje
+- Mechanizm integracji
+
+3.Implementacja  +testy wewnêtrzne
+Plan i postêp Implementacji
+Plan, postêp, wyniki i zatwierdzenie testów
+Testy fynkcjonalne
+Testy integracyjne
+Testy wydajnoœciowe
+Testy bezpieczenstwa
+Testy regresji
+Dokumentacja zmiany
+Raport z testow
+
+Zmiany
+- Typ zmiany
+- Obiekt zmiany
+- Opis zmian
+- osoba wprowadzj¹ca zmianê
+- rollback zmiany
+
+4.Testy akceptacyjne (biznes)
+Plan, postêp, wyniki i zatwierdzenie testów
+- osoby testuj¹ce
+- scenariusze
+- wyniki testów
+Rodzaje b³edów : koncepcyjne, integracyjne, zabezpieczeñ, implementacyjne, itp
+
+5.Implementacja Produkcja
+- GoLife - uruchomienie
+- testy dymne - Plan, postêp, wyniki i zatwierdzenie testów
+
+6.Stabilizacja
+monitorowanie zmian po wdro¿eniu
+raport z monitiringu
+kierunek dzia³añ koryguj¹cych
+
+7.Zmiana zrealizowana
+- potwierdzenie biznesu - protokó³ bêd¹cy podstaw¹ rolziczenia zadania
+
+
+
