@@ -21,7 +21,7 @@ Użytkownicy w ActiveDirectory powinni:
 - mieć ustawione `użytkownik nie może zmienić sobie hasła`
 - mieć członkostwo w przypisanych grupach pola csv : `Grupa1`, `Grupa2`, `Grupa3`.
 
-Miejsce składowania csv – LINK do SCV
+Miejsce skąd można pobrać csv: [Google Sheets](https://docs.google.com/spreadsheets/d/10ByKRtouhrYQeRe-M0_roavm1qju1PMbRc2qkl6RyE8/edit?usp=sharing)
 
 **UWAGA:** przed zasileniem ActiveDirectory należy pobrać csv i poprawnie sformatować separatory i stronę kodowania (utf8)
 
