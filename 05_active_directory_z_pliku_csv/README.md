@@ -9,7 +9,7 @@
 
 ## Warunki zadania
 
-Użytkownicy w ActiveDirectory powinni :
+Użytkownicy w ActiveDirectory powinni:
 
 - mieć wypełnione wszystkie atrybuty AD opisowe (zaznaczone na zielono)
 - mieć wypełniony atrybut AD o nazwie Street połączonym opisem pól z csv ulica + numer budynku + numer pomieszczenia
