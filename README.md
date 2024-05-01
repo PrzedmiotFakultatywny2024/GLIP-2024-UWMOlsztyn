@@ -5,8 +5,8 @@ Repozytorium zbierające wszystkie materiały dla Przedmiotu Fakultatywnego prow
 | **ID** |                              **Zadanie**                               | **Opis**                                                                                 |     **Termin wykonania**      |
 | ------ | :--------------------------------------------------------------------: | ---------------------------------------------------------------------------------------- | :---------------------------: |
 | 1      |                         Data injection w GLPI                          |                                                                                          |                               |
-| 2      |                                Diagram                                 |                                                                                          |                               |
-| 3      |                         Agent backup & restore                         |                                                                                          |                               |
+| 2      |                                Diagram                                 | Zaprojektowanie diagramu BPMN.                                                           |                               |
+| 3      |                         Agent backup & restore                         | Instalacja agenta GLPI na różnych urządzenaich oraz stworzenie backupu.                  |          2024-04-25           |
 | 4      |                          Zarządzanie ryzykiem                          | Dopisanie, zgodnie z wzorem, dwóch ryzyk (zagrożenie / okazja) oraz jednego zagadnienia. |          2024-04-23           |
 | 5      | [Zasilenie ActiveDirectory](05_active_directory_z_pliku_csv/README.md) | Zasilenie platformy GLPi informacjami o użytkownikach i grupach.                         | sobota 2024-05-11 godz. 12:00 |
 
