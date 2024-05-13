@@ -1,0 +1,291 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I. Informacja o serwerze inwentaryzowanym
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Obecna instalacja : Windows Server 2022 Evaluation (180dni)
+wirtualizator : VMware Workstation 16 Player
+dystrybucja : SERVER_EVAL_x64FRE_en-us.iso
+zasoby : 2CPU, 8GBRAM, 30GBHDD 
+instalacja : Ubuntu Server (minimized)
+sieæ : 
+(opcja1) NAT, Static IP: 192.168.197.154/24, Brama: 192.168.197.2
+(opcja2) Bridge, Dynamic IP
+Role : ActiveDirectory, Serwer SQL
+
+-> administrator / !1Olsztyn
+
+======================================
+1. Przed³u¿enie okresu próbnego do 3lat
+======================================
+
+PowerShell
+slmgr -dlv
+slmgr -rearm
+shutdown -r -t 0
+slmgr -dli
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+II. Informacja o serwerze aplikacyjnym
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Obecna instalacja : Ubuntu 22.04.3 Server 
+wirtualizator : VMware Workstation 16 Player
+dystrybucja : ubuntu-22.04.3-live-server-amd64.iso
+zasoby : 2CPU, 2GBRAM, 30GBHDD 
+instalacja : Ubuntu Server (minimized)
+sieæ : 
+(opcja2) NAT, Static IP: 192.168.197.150/24, Brama: 192.168.197.2
+(opcja2) Bridge, Dynamic IP
+
+nazwa serwerów : glpi-uwm-apache-01, glpi-uwm-nginx-01
+
+sudo: adminer / !1Olsztyn
+app : glpi / !1Olsztyn
+
+======================================
+1. Konfiguracja interfejsu sieciowego
+======================================
+
+/etc/netplan/00-installer-config.yaml
+
+[opcja1] Static IP
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      addresses:
+        - 192.168.197.150/24
+      nameservers:
+        addresses: [192.168.197.2, 8.8.8.8]
+      routes:
+        - to: default
+          via: 192.168.197.2
+
+[opcja2] Dynamic IP
+network:
+  ethernets:
+    ens33:
+      dhcp4: true
+  version: 2
+
+Po przygotowaniu netplan nale¿y konfiguracjê przetestowaæ 
+netplan try
+
+oraz zatwierdziæ
+netplan apply
+
+Szablony YAML dla netplan
+https://github.com/canonical/netplan/tree/main/examples
+
+apt update && apt upgrade
+
+======================================
+2 Ustawienie strefy czasowej PL Ubuntu
+======================================
+
+timedatectl - weryfikacja strefy czasowej
+
+timedatectl set-timezone Europe/Warsaw
+
+
+======================================
+3. Instalacja WebAdmina i narzêdzi
+======================================
+
+apt install ufw zip vim apt-transport-https curl wget software-properties-common net-tools ca-certificates
+
+apt update && apt upgrade
+
+wget https://download.webmin.com/jcameron-key.asc 
+cat jcameron-key.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/jcameron-key.gpg >/dev/null
+
+add-apt-repository "deb https://download.webmin.com/download/repository sarge contrib"
+
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D97A3AE911F63C51 (skopiowany odcis z wczesniejszej komendy)
+add-apt-repository "deb https://download.webmin.com/download/repository sarge contrib"
+
+apt update && apt upgrade
+
+apt install webmin
+
+ufw allow 10000
+systemctl status webmin
+
+WebMin z FierFox <IP serwer>:10000
+adminer !1Olsztyn
+
+======================================
+4. Instalacja webServer (Apache2)
+======================================
+
+apt install apache2
+
+a2enmod rewrite
+
+systemctl status Apache2
+
+apache2 -v
+
+apt update && apt upgrade
+
+====================================== 
+5. instalacja MariaDB
+======================================
+
+curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version="mariadb-11.2"
+
+apt install mariadb-server
+sudo mariadb_secure_installation
+mariadb-admin version
+
+systemctl status mariadb
+
+apt install galera-4 mariadb-client libmariadb3 mariadb-backup mariadb-common
+
+mariadb
+
+apt update && apt upgrade
+
+======================================
+6. Instalacja PHP 8.2
+======================================
+ 
+php -v
+
+add-apt-repository ppa:ondrej/php
+
+apt update && apt upgrade
+
+apt install php8.2-cli php8.2-cgi
+
+apt install php8.2-xml php8.2-curl php8.2-zip php8.2-gd php8.2-intl php8.2-imagick php8.2-imap php8.2-memcache php8.2-mcrypt php8.2-tidy php8.2-xmlrpc php8.2-mbstring php8.2-ldap php8.2-apcu libapache2-mod-php8.2 php8.2-mysql php8.2-mysqlnd php8.2-bz2 php8.2-soap php8.2-bcmath php8.2-common php8.2-cli php8.2-pspell
+
+apt install php8.2-dom, php8.2-simplexml, php8.2-xmlreader, php8.2-xmlwriter
+
+======================================
+7. Instalacja phpMyAdmin
+======================================
+
+apt install phpmyadmin
+
+phpenmod mbstring
+
+phpmyadmin !1Olsztyn
+
+======================================
+8. Instalacja GLPi
+======================================
+
+mariadb -u root -p
+CREATE DATABASE glpi;
+CREATE USER 'glpi'@'%' IDENTIFIED BY '!1Warszawa';
+GRANT ALL PRIVILEGES ON glpi.* TO 'glpi'@'%';
+GRANT SELECT ON mysql.time_zone_name TO 'glpi'@'%';
+FLUSH PRIVILEGES;
+SHOW GRANTS FOR 'glpi'@'%';
+
+GRANT ALL PRIVILEGES ON *.* TO `phpmyadmin`@`localhost`
+
+MariaDB [mysql]> select User,host,Grant_priv,is_role,password_expired,default_role from mysql.user;
+
+/etc/mysql/mariadb.conf.d/50-server.cnf
+#bind-address = 0.0.0.0 
+bind-address = 192.168.197.150 
+
+weryfikacja po³¹czenia z zewnêtrznego IP 
+mariadb -h 192.168.197.150 -u glpi -p glpi
+
+wget -O glpi-10.0.11.tgz https://github.com/glpi-project/glpi/releases/download/10.0.11/glpi-10.0.11.tgz
+
+#sudo tar -xvf /tmp/glpi-10.0.11.tgz /var/www/html/
+
+chown -R www-data:www-data glpi
+chmod -R 775 glpi
+
+systemctl restart apache2
+
+http://192.168.197.150/glpi
+login: glpi 
+has³o: glpi
+
+======================================
+9. Usuniêcie ostrze¿eñ
+======================================
+
+1. usuniêcie pliku install.php
+cd /var/www/html/glpi/install/
+mv install.php install_old.p_p
+
+2. Konfiguracja katalogu g³ównego serwera www nie jest bezpieczna, poniewa¿ umo¿liwia dostêp do plików niepublicznych. Wiêcej informacji mo¿na znaleŸæ w dokumentacji instalacji.
+
+ref: https://glpi-install.readthedocs.io/en/latest/prerequisites.html#apache-configuration
+
+zapisz konfiguracje do tmp
+cd /etc/apache2/sites-available/
+mkdir tmp
+cp -a 000-default.conf tmp/
+
+nano /etc/apache2/sites-available/000-default.conf
+
+
+<VirtualHost *:80>
+    ServerName glpi.localhost
+
+    DocumentRoot /var/www/html/glpi/public
+
+    # If you want to place GLPI in a subfolder of your site (e.g. your virtual host is serving multiple applications),
+    # you can use an Alias directive. If you do this, the DocumentRoot directive MUST NOT target the GLPI directory itself.
+    # Alias "/glpi" "/var/www/html/glpi/public"
+
+    <Directory /var/www/html/glpi/public>
+        Require all granted
+
+        RewriteEngine On
+
+        # Redirect all requests to GLPI router, unless file exists.
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ index.php [QSA,L]
+    </Directory>
+</VirtualHost>
+
+a2enmod rewrite && sudo service apache2 restart
+
+
+3. PHP directive "session.cookie_httponly" should be set to "on" to prevent client-side script to access cookie values.
+sudo nano /etc/php/8.2/apache2/php.ini
+
+ustawienie flagi 
+session.cookie_httponly = On
+systemctl restart apache2
+
+======================================
+10. Ustawienie Timezones
+======================================
+
+GLPi Ustawienia > Ogólne > Serwer
+Timezones seems not loaded, see https://glpi-install.readthedocs.io/en/latest/timezones.html.Timezones seems not loaded, see https://glpi-install.readthedocs.io/en/latest/timezones.html.
+
+
+mariadb-tzinfo-to-sql /usr/share/zoneinfo | mariadb -u root -p mysql
+
+Weryfikacja 
+GLPi > Administracja > U¿ytkownicy > glpi > strefa czasowa
+
+
+======================================
+11. Wydanoœæ zmiana pamiêci cache
+======================================
+
+konfiguracja OpCache
+
+/etc/php/8.2/apache2/php.ini
+
+opcache.enable_cli=1
+opcache.memory_consumption=256
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=10000
+opcache.revalidate_freq=60
+systemctl restart apache2
+
+Weryfikacja 
+GLPi > Ustawienia > Ogólne > Wydajnoœæ
